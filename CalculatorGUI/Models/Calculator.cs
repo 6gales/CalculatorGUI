@@ -44,7 +44,7 @@ namespace CalculatorGUI.Models
 
 			_constants = new Dictionary<string, double>()
 			{
-				["pi"] = Math.PI,
+				["π"] = Math.PI,
 				["e"] = Math.E
 			};
 
@@ -106,10 +106,9 @@ namespace CalculatorGUI.Models
 			_history.Push(expression);
 		}
 
-		private Stack<string> History()
-		{
-			return _history;
-		}
+		public IEnumerable<string> History => _history;
+
+		public IEnumerable<double> Memory => _remembered;
 
 		private string InfixToPostfix(string infix)
 		{

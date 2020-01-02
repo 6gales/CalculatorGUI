@@ -1,0 +1,122 @@
+﻿<Window x:Class="CalculatorGUI.Views.CalculatorWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:CalculatorGUI"
+		xmlns:viewModels="clr-namespace:CalculatorGUI.ViewModels"
+		mc:Ignorable="d"
+		Title="Calculator" Height="450" Width="800"
+		PreviewTextInput="TextInputEvent">
+	<Window.DataContext>
+		<viewModels:CalculatorViewModel/>
+	</Window.DataContext>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<TextBox MinWidth="100" Grid.Column="1" Grid.ColumnSpan="3"
+				 Margin="3,3,0,3" Padding="3" KeyDown="KeyEvents" KeyUp="KeyEvents"
+				 PreviewTextInput="TextInputEvent" Name="UserInput" FontSize="30"/>
+
+		<Button Grid.Row="1" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">e</Button>
+		<Button Grid.Row="1" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">π</Button>
+
+		<Button Grid.Row="1" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">(</Button>
+		<Button Grid.Row="1" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">)</Button>
+
+		<Button Grid.Row="1" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">7</Button>
+		<Button Grid.Row="1" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">8</Button>
+		<Button Grid.Row="1" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">9</Button>
+
+		<Button Grid.Row="2" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">4</Button>
+		<Button Grid.Row="2" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">5</Button>
+		<Button Grid.Row="2" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">6</Button>
+
+		<Button Grid.Row="3" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">1</Button>
+		<Button Grid.Row="3" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">2</Button>
+		<Button Grid.Row="3" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">3</Button>
+
+		<Button Grid.Row="4" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">0</Button>
+
+		<Button Grid.Row="0" Grid.Column="4" Margin="3" Click="AddTextToInputWithBraceOnClick">abs</Button>
+		<Button Grid.Row="0" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">/</Button>
+		<Button Grid.Row="1" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">*</Button>
+		<Button Grid.Row="2" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">-</Button>
+		<Button Grid.Row="3" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">+</Button>
+		<!--<Button Grid.Row="1" Grid.Column="1" Margin="3" Click="ButtonOnClick">=</Button>-->
+
+		<Button Grid.Row="0" Grid.Column="4" Margin="3" Click="ClearInputOnClick">Clear</Button>
+		<Button Grid.Row="1" Grid.Column="4" Margin="3" Click="EraseSymbolOnClick">&lt;-</Button>
+
+		<ToggleButton Grid.Row="4" Grid.Column="0"
+		              Click="InverseButtonsOnClick"
+		              Margin="3">Inverse
+		</ToggleButton>
+
+		<viewModels:InversiveButton Grid.Row="2" Grid.Column="1"
+									viewModels:MainContent="DEG"
+									InversedContent="RAD"
+									Click="InverseDegreesOnClick"
+									Margin="3">DEG
+		</viewModels:InversiveButton>
+
+		<viewModels:InversiveButton Grid.Row="2" Grid.Column="1"
+									viewModels:MainContent="sin"
+									InversedContent="arcsin"
+									Click="AddTextToInputWithBraceOnClick"
+									x:Name="SinButton"
+									Margin="3">sin
+		</viewModels:InversiveButton>
+		<viewModels:InversiveButton Grid.Row="2" Grid.Column="1"
+									viewModels:MainContent="cos"
+									InversedContent="arccos"
+									Click="AddTextToInputWithBraceOnClick"
+									x:Name="CosButton"
+									Margin="3">cos
+		</viewModels:InversiveButton>
+		<viewModels:InversiveButton Grid.Row="2" Grid.Column="1"
+									viewModels:MainContent="tg"
+									InversedContent="arctg"
+									Click="AddTextToInputWithBraceOnClick"
+									x:Name="TgButton"
+									Margin="3">tg
+		</viewModels:InversiveButton>
+
+		<TabControl Grid.Row="2" Grid.Column="1">
+			<TabItem>
+				<TabItem.Header>
+					<TextBlock Margin="3">History</TextBlock>
+				</TabItem.Header>
+				<TabItem.Content>
+					<ListView
+						PreviewMouseLeftButtonUp="SetTextOnClick"
+						ItemsSource="{Binding History}">
+					</ListView>
+				</TabItem.Content>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>
+					<TextBlock Margin="3">Memory</TextBlock>
+				</TabItem.Header>
+				<TabItem.Content>
+					<ListView
+						PreviewMouseLeftButtonUp="SetTextOnClick"
+						ItemsSource="{Binding Memory}">
+					</ListView>
+				</TabItem.Content>
+			</TabItem>
+		</TabControl>
+	</Grid>
+</Window>
