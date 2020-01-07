@@ -5,11 +5,11 @@ using CalculatorGUI.Models.Operations;
 
 namespace CalculatorGUI.Models
 {
-	class Calculator
+	class Calculator : ICalculator
 	{
 		private readonly Dictionary<string, IOperation> _operationDictionary;
 		private readonly Dictionary<string, double> _constants;
-		private readonly Stack<double> _remembered;
+		private readonly Stack<double> _memory;
 		private readonly Stack<double> _numbers;
 		private readonly Stack<string> _history;
 		private readonly DegreeConverter _converter;
@@ -48,7 +48,7 @@ namespace CalculatorGUI.Models
 				["e"] = Math.E
 			};
 
-			_remembered = new Stack<double>();
+			_memory = new Stack<double>();
 			_numbers = new Stack<double>();
 			_history = new Stack<string>();
 
@@ -58,9 +58,13 @@ namespace CalculatorGUI.Models
 			};
 		}
 
+		public void ClearMemory() => _memory.Clear();
+
+		public void Remember(double number) => _memory.Push(number);
+
 		public double Calculate(string expression)
 		{
-			_remembered.Pop();
+			_memory.Pop();
 			_numbers.Clear();
 
 			expression = InfixToPostfix(expression);
@@ -91,7 +95,7 @@ namespace CalculatorGUI.Models
 				parsed = "";
 			}
 
-			_remembered.Push(_numbers.Peek());
+			_memory.Push(_numbers.Peek());
 			return _numbers.Pop();
 		}
 
@@ -108,8 +112,9 @@ namespace CalculatorGUI.Models
 
 		public IEnumerable<string> History => _history;
 
-		public IEnumerable<double> Memory => _remembered;
+		public IEnumerable<double> Memory => _memory;
 
+		#region Private
 		private string InfixToPostfix(string infix)
 		{
 			bool lastIsOp = true;
@@ -193,5 +198,6 @@ namespace CalculatorGUI.Models
 
 			return postfix;
 		}
+		#endregion
 	}
 }

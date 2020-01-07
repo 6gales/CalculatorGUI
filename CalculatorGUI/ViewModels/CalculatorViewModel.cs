@@ -20,6 +20,20 @@ namespace CalculatorGUI.ViewModels
 
 		public IEnumerable<double> Memory => _calculator.Memory;
 
+		public void ClearMemory() => _calculator.ClearMemory();
+
+		public void Remember(string expr)
+		{
+			if (double.TryParse(expr, out double result))
+			{
+				_calculator.Remember(result);
+				return;
+			}
+
+			result = _calculator.Calculate(expr);
+			_calculator.Remember(result);
+		}
+
 		#region INotifyPropertyChanged
 		public event PropertyChangedEventHandler PropertyChanged;
 

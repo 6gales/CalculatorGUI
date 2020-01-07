@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -154,6 +155,21 @@ namespace CalculatorGUI.Views
 		private void ClearInputOnClick(object sender, RoutedEventArgs e)
 		{
 			UserInput.Text = "";
+		}
+
+		private void ClearMemoryOnClick(object sender, RoutedEventArgs e)
+		{
+//			_viewModel.
+		}
+
+		private void SetFromMemoryOnClick(object sender, RoutedEventArgs e)
+		{
+			UserInput.Text = $"{_viewModel.Memory.FirstOrDefault()}";
+		}
+
+		private void SaveToMemoryOnClick(object sender, RoutedEventArgs e)
+		{
+			
 		}
 	}
 }

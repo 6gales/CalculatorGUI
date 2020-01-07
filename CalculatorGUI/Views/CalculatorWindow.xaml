@@ -30,6 +30,10 @@
 				 Margin="3,3,0,3" Padding="3" KeyDown="KeyEvents" KeyUp="KeyEvents"
 				 PreviewTextInput="TextInputEvent" Name="UserInput" FontSize="30"/>
 
+		<Button Grid.Row="1" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">MC</Button>
+		<Button Grid.Row="1" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">MR</Button>
+		<Button Grid.Row="1" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">MS</Button>
+
 		<Button Grid.Row="1" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">e</Button>
 		<Button Grid.Row="1" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">π</Button>
 
@@ -51,6 +55,7 @@
 		<Button Grid.Row="4" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">0</Button>
 
 		<Button Grid.Row="0" Grid.Column="4" Margin="3" Click="AddTextToInputWithBraceOnClick">abs</Button>
+		<Button Grid.Row="0" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">^</Button>
 		<Button Grid.Row="0" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">/</Button>
 		<Button Grid.Row="1" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">*</Button>
 		<Button Grid.Row="2" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">-</Button>
