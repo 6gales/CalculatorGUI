@@ -5,21 +5,20 @@ namespace CalculatorGUI.Models.Operations
 {
 	class Arccos : IOperation
 	{
-		private readonly DegreeConverter _converter;
-
-		public Arccos(DegreeConverter converter)
-		{
-			_converter = converter;
-		}
-
 		public OperationPriority GetPriority() => OperationPriority.UnaryPriority;
 
-		public void Operate(Stack<double> numbers)
+		public void Operate(Stack<double> numbers, CalculationCulture currentCulture)
 		{
 			if (numbers.Count < 1)
 				throw new Exception("Bad syntax");
 
-			numbers.Push(_converter.ConvertDegreesIfNeeded(Math.Acos(numbers.Pop())));
+			var value = Math.Acos(numbers.Pop());
+			if (currentCulture.UseDegrees)
+			{
+				value = CalculationUtils.DegreesToRad(value);
+			}
+
+			numbers.Push(value);
 		}
 	}
 }

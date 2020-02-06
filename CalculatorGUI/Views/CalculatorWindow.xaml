@@ -3,17 +3,18 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:local="clr-namespace:CalculatorGUI"
 		xmlns:viewModels="clr-namespace:CalculatorGUI.ViewModels"
+		xmlns:controls="clr-namespace:CalculatorGUI.Views.Controls"
 		mc:Ignorable="d"
 		Title="Calculator" Height="450" Width="600"
-		PreviewTextInput="TextInputEvent">
+		PreviewTextInput="HandleTextInputEvent">
 	<Window.DataContext>
-		<viewModels:CalculatorViewModel/>
+		<viewModels:CalculatorViewModel x:Name="CalculatorViewModel"/>
 	</Window.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="2*"></RowDefinition>
+			<RowDefinition></RowDefinition>
 			<RowDefinition></RowDefinition>
 			<RowDefinition></RowDefinition>
 			<RowDefinition></RowDefinition>
@@ -30,89 +31,97 @@
 			<ColumnDefinition></ColumnDefinition>
 			<ColumnDefinition Width="3*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
-		<TextBox Grid.ColumnSpan="5"
-				 KeyDown="KeyEvents" KeyUp="KeyEvents"
-				 PreviewTextInput="TextInputEvent"
-				 Name="UserInput" FontSize="30"/>
+		<TextBox
+			Grid.ColumnSpan="5"
+			Margin="3"
+			SelectionChanged="HandleSelectionChanged"
+			Name="UserInput" FontSize="30"
+			Text="{Binding UserInput}"/>
+		<Label
+			Grid.Row ="1" Grid.Column="0" Grid.ColumnSpan="5"
+			Margin="3"
+			HorizontalAlignment="Right"
+			FontSize="20"
+			Content="{Binding Result}"/>
 
-		<Button Grid.Row="1" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">MC</Button>
-		<Button Grid.Row="1" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">MR</Button>
-		<Button Grid.Row="1" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">MS</Button>
-		<Button Grid.Row="1" Grid.Column="3" Margin="3" Click="ClearInputOnClick">Clear</Button>
+		<Button Grid.Row="2" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">MC</Button>
+		<Button Grid.Row="2" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">MR</Button>
+		<Button Grid.Row="2" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">MS</Button>
+		<Button Grid.Row="2" Grid.Column="3" Margin="3" Click="ClearInputOnClick">Clear</Button>
 		<Button
-			Grid.Row="1" Grid.Column="4" Margin="3"
+			Grid.Row="2" Grid.Column="4" Margin="3"
 			FontFamily="Segoe MDL2 Assets"
 			Content="&#xE72B;"
 			Click="EraseSymbolOnClick"/>
 
-		<viewModels:InversiveButton
-			Grid.Row="2" Grid.Column="0"
+		<controls:InversiveButton
+			Grid.Row="3" Grid.Column="0"
 			InversedContent="RAD"
 			Click="InverseDegreesOnClick"
 			Margin="3">DEG
-		</viewModels:InversiveButton>
+		</controls:InversiveButton>
 
 
 		<ToggleButton
-			Grid.Row="2" Grid.Column="1"
+			Grid.Row="3" Grid.Column="1"
 			Click="InverseButtonsOnClick"
 			Margin="3">Inverse
 		</ToggleButton>
 
-		<viewModels:InversiveButton
-			Grid.Row="2" Grid.Column="2"
+		<controls:InversiveButton
+			Grid.Row="3" Grid.Column="2"
 			InversedContent="arcsin"
 			Click="AddTextToInputWithBraceOnClick"
 			x:Name="SinButton"
 			Margin="3">sin
-		</viewModels:InversiveButton>
-		<viewModels:InversiveButton
-			Grid.Row="2" Grid.Column="3"
+		</controls:InversiveButton>
+		<controls:InversiveButton
+			Grid.Row="3" Grid.Column="3"
 			InversedContent="arccos"
 			Click="AddTextToInputWithBraceOnClick"
 			x:Name="CosButton"
 			Margin="3">cos
-		</viewModels:InversiveButton>
-		<viewModels:InversiveButton
-			Grid.Row="2" Grid.Column="4"
+		</controls:InversiveButton>
+		<controls:InversiveButton
+			Grid.Row="3" Grid.Column="4"
 			InversedContent="arctg"
 			Click="AddTextToInputWithBraceOnClick"
 			x:Name="TgButton"
 			Margin="3">tg
-		</viewModels:InversiveButton>
+		</controls:InversiveButton>
 
-		<Button Grid.Row="3" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">π</Button>
-		<Button Grid.Row="3" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">e</Button>
-		<Button Grid.Row="3" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">(</Button>
-		<Button Grid.Row="3" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">)</Button>
-		<Button Grid.Row="3" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">/</Button>
+		<Button Grid.Row="4" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">π</Button>
+		<Button Grid.Row="4" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">e</Button>
+		<Button Grid.Row="4" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">(</Button>
+		<Button Grid.Row="4" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">)</Button>
+		<Button Grid.Row="4" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">/</Button>
 
-		<Button Grid.Row="4" Grid.Column="0" Margin="3" Click="AddTextToInputWithBraceOnClick">ln</Button>
-		<Button Grid.Row="4" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">7</Button>
-		<Button Grid.Row="4" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">8</Button>
-		<Button Grid.Row="4" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">9</Button>
-		<Button Grid.Row="4" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">*</Button>
+		<Button Grid.Row="5" Grid.Column="0" Margin="3" Click="AddTextToInputWithBraceOnClick">ln</Button>
+		<Button Grid.Row="5" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">7</Button>
+		<Button Grid.Row="5" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">8</Button>
+		<Button Grid.Row="5" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">9</Button>
+		<Button Grid.Row="5" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">*</Button>
 
-		<Button Grid.Row="5" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">!</Button>
-		<Button Grid.Row="5" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">4</Button>
-		<Button Grid.Row="5" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">5</Button>
-		<Button Grid.Row="5" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">6</Button>
-		<Button Grid.Row="5" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">-</Button>
+		<Button Grid.Row="6" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">!</Button>
+		<Button Grid.Row="6" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">4</Button>
+		<Button Grid.Row="6" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">5</Button>
+		<Button Grid.Row="6" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">6</Button>
+		<Button Grid.Row="6" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">-</Button>
 
-		<Button Grid.Row="6" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">%</Button>
-		<Button Grid.Row="6" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">1</Button>
-		<Button Grid.Row="6" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">2</Button>
-		<Button Grid.Row="6" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">3</Button>
-		<Button Grid.Row="6" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">+</Button>
+		<Button Grid.Row="7" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">%</Button>
+		<Button Grid.Row="7" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">1</Button>
+		<Button Grid.Row="7" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">2</Button>
+		<Button Grid.Row="7" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">3</Button>
+		<Button Grid.Row="7" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">+</Button>
 
-		<Button Grid.Row="7" Grid.Column="0" Margin="3" Click="AddTextToInputWithBraceOnClick">abs</Button>
-		<Button Grid.Row="7" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">^</Button>
-		<Button Grid.Row="7" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">0</Button>
-		<Button Grid.Row="7" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">.</Button>
-		<Button Grid.Row="7" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">=</Button>
+		<Button Grid.Row="8" Grid.Column="0" Margin="3" Click="AddTextToInputWithBraceOnClick">abs</Button>
+		<Button Grid.Row="8" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">^</Button>
+		<Button Grid.Row="8" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">0</Button>
+		<Button Grid.Row="8" Grid.Column="3" Margin="3" Click="AddTextToInputOnClick">.</Button>
+		<Button Grid.Row="8" Grid.Column="4" Margin="3" Click="AddTextToInputOnClick">=</Button>
 
 		<TabControl
-			Grid.Row="0" Grid.RowSpan="8" Grid.Column="5">
+			Grid.Row="0" Grid.RowSpan="9" Grid.Column="5">
 			<TabItem>
 				<TabItem.Header>
 					<TextBlock Margin="3">History</TextBlock>

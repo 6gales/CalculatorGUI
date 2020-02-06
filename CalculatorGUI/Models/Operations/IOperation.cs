@@ -8,6 +8,6 @@ namespace CalculatorGUI.Models.Operations
 	{
 		OperationPriority GetPriority();
 
-		void Operate(Stack<double> numbers);
+		void Operate(Stack<double> numbers, CalculationCulture currentCulture);
 	}
 }

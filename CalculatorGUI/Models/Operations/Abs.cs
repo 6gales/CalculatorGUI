@@ -7,7 +7,7 @@ namespace CalculatorGUI.Models.Operations
 	{
 		public OperationPriority GetPriority() => OperationPriority.UnaryPriority;
 
-		public void Operate(Stack<double> numbers)
+		public void Operate(Stack<double> numbers, CalculationCulture currentCulture)
 		{
 			numbers.Push(Math.Abs(numbers.Pop()));
 		}

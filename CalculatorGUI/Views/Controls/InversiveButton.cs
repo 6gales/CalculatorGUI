@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace CalculatorGUI.ViewModels
+namespace CalculatorGUI.Views.Controls
 {
 	class InversiveButton : Button
 	{

@@ -16,6 +16,10 @@ namespace CalculatorGUI.ViewModels
 			_calculator = new Calculator();
 		}
 
+		public string UserInput { get; set; }
+
+		public string Result { get; set; }
+
 		public IEnumerable<string> History => _calculator.History;
 
 		public IEnumerable<double> Memory => _calculator.Memory;

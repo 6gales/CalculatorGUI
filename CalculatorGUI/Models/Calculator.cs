@@ -12,14 +12,8 @@ namespace CalculatorGUI.Models
 		private readonly Stack<double> _memory;
 		private readonly Stack<double> _numbers;
 		private readonly Stack<string> _history;
-		private readonly DegreeConverter _converter;
 
-		public bool IsDegreesEnabled
-		{
-			get => _converter.IsDegreesEnabled;
-			set => _converter.IsDegreesEnabled = value;
-		}
-
+		public CalculationCulture CurrentCulture { get; set; }
 		public Calculator()
 		{
 			_operationDictionary = new Dictionary<string, IOperation>()
@@ -34,12 +28,12 @@ namespace CalculatorGUI.Models
 //				["u%"] = new OnePercent(),
 				["u-"] = new UnaryMinus(),
 				["sqrt"] = new Sqrt(),
-				["sin"] = new Sin(_converter),
-				["cos"] = new Cos(_converter),
-				["tg"] = new Tan(_converter),
-				["arcsin"] = new Sin(_converter),
-				["arccos"] = new Cos(_converter),
-				["arctg"] = new Tan(_converter)
+				["sin"] = new Sin(),
+				["cos"] = new Cos(),
+				["tg"] = new Tan(),
+				["arcsin"] = new Sin(),
+				["arccos"] = new Cos(),
+				["arctg"] = new Tan()
 			};
 
 			_constants = new Dictionary<string, double>()
@@ -51,11 +45,6 @@ namespace CalculatorGUI.Models
 			_memory = new Stack<double>();
 			_numbers = new Stack<double>();
 			_history = new Stack<string>();
-
-			_converter = new DegreeConverter()
-			{
-				IsDegreesEnabled = false
-			};
 		}
 
 		public void ClearMemory() => _memory.Clear();
@@ -77,7 +66,7 @@ namespace CalculatorGUI.Models
 
 				if (_operationDictionary.TryGetValue(parsed, out IOperation operation))
 				{
-					operation.Operate(_numbers);
+					operation.Operate(_numbers, CurrentCulture);
 				}
 				else
 				{
