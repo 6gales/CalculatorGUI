@@ -1,27 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Text;
 using CalculatorGUI.Models;
 
 namespace CalculatorGUI.ViewModels
 {
 	class CalculatorViewModel : INotifyPropertyChanged
 	{
-		private readonly Calculator _calculator;
+		private readonly Calculator _calculator = new Calculator();
+		private string _userInput;
+		private string _result;
 
-		public CalculatorViewModel()
+		public string UserInput
 		{
-			_calculator = new Calculator();
+			get => _userInput;
+			set
+			{
+				_userInput = value;
+				OnPropertyChanged(nameof(UserInput));
+
+				try
+				{
+					var result = _calculator.Calculate(_userInput);
+					Result = result.ToString(CultureInfo.CurrentCulture);
+				}
+				catch
+				{
+					// ignored
+				}
+			}
 		}
 
-		public string UserInput { get; set; }
+		public string Result
+		{
+			get => _result;
+			set
+			{
+				_result = value;
+				OnPropertyChanged(nameof(Result));
+			}
+		}
 
-		public string Result { get; set; }
 
 		public IEnumerable<string> History => _calculator.History;
-
 		public IEnumerable<double> Memory => _calculator.Memory;
 
 		public void ClearMemory() => _calculator.ClearMemory();

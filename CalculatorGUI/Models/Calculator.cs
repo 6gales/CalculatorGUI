@@ -53,7 +53,6 @@ namespace CalculatorGUI.Models
 
 		public double Calculate(string expression)
 		{
-			_memory.Pop();
 			_numbers.Clear();
 
 			expression = InfixToPostfix(expression);

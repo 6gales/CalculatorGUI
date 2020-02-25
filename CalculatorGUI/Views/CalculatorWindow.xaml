@@ -7,7 +7,8 @@
 		xmlns:controls="clr-namespace:CalculatorGUI.Views.Controls"
 		mc:Ignorable="d"
 		Title="Calculator" Height="450" Width="600"
-		PreviewTextInput="HandleTextInputEvent">
+		PreviewTextInput="HandleTextInputEvent"
+		KeyDown="OnKeyDownHandler">
 	<Window.DataContext>
 		<viewModels:CalculatorViewModel x:Name="CalculatorViewModel"/>
 	</Window.DataContext>
@@ -36,7 +37,7 @@
 			Margin="3"
 			SelectionChanged="HandleSelectionChanged"
 			Name="UserInput" FontSize="30"
-			Text="{Binding UserInput}"/>
+			Text="{Binding UserInput, UpdateSourceTrigger=PropertyChanged}"/>
 		<Label
 			Grid.Row ="1" Grid.Column="0" Grid.ColumnSpan="5"
 			Margin="3"

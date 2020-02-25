@@ -34,7 +34,7 @@ namespace CalculatorGUI.Views
 			switch (e.Key)
 			{
 				case Key.Enter:
-
+				
 					break;
 				case Key.Back:
 					UserInput.Text = UserInput.Text.Remove(UserInput.Text.Length - 1);
@@ -52,7 +52,7 @@ namespace CalculatorGUI.Views
 		private void HandleTextInputEvent(object sender, TextCompositionEventArgs e)
 		{
 			if (!UserInput.IsFocused)
-				UserInput.Text += e.Text;
+				CalculatorViewModel.UserInput += e.Text;
 		}
 
 		private void InverseButtonsOnClick(object sender, RoutedEventArgs e)
@@ -108,7 +108,7 @@ namespace CalculatorGUI.Views
 
 		private void ClearInputOnClick(object sender, RoutedEventArgs e)
 		{
-			UserInput.Text = "";
+			CalculatorViewModel.UserInput = "";
 		}
 
 		private void ClearMemoryOnClick(object sender, RoutedEventArgs e)
