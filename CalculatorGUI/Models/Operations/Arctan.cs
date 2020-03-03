@@ -5,7 +5,7 @@ namespace CalculatorGUI.Models.Operations
 {
 	class Arctan : IOperation
 	{
-		public OperationPriority GetPriority() => OperationPriority.UnaryPriority;
+		public OperationPriority GetPriority() => OperationPriority.FunctionPriority;
 
 		public int NumberOfOperands()
 		{

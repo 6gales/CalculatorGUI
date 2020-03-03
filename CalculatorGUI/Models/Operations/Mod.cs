@@ -3,19 +3,9 @@ using System.Collections.Generic;
 
 namespace CalculatorGUI.Models.Operations
 {
-	class PercentOf// : IOperation
+	class Mod : IOperation
 	{
-		public int GetPriority()
-		{
-			return 3;
-		}
-
-		public int NumberOfOperands()
-		{
-			return 2;
-		}
-
-		public void Operate(Stack<double> numbers)
+		public void Operate(Stack<double> numbers, CalculationCulture currentCulture)
 		{
 			if (numbers.Count < 2)
 				throw new Exception("Bad syntax");
@@ -23,7 +13,12 @@ namespace CalculatorGUI.Models.Operations
 			double a = numbers.Pop(),
 				b = numbers.Peek();
 
-			numbers.Push(b * a / 100.0);
+			numbers.Push(b % a);
+		}
+		
+		public OperationPriority GetPriority()
+		{
+			return OperationPriority.MulPriority;
 		}
 	}
 }

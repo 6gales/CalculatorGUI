@@ -5,7 +5,7 @@ namespace CalculatorGUI.Models.Operations
 {
 	class Pow : IOperation
 	{
-		public OperationPriority GetPriority() => OperationPriority.UnaryPriority;
+		public OperationPriority GetPriority() => OperationPriority.PowPriority;
 
 		public void Operate(Stack<double> numbers, CalculationCulture currentCulture)
 		{

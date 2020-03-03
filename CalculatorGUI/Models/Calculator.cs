@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Globalization;
+using System.Text;
 using CalculatorGUI.Models.Operations;
 
 namespace CalculatorGUI.Models
 {
-	class Calculator : ICalculator
+	public class Calculator : ICalculator
 	{
 		private readonly Dictionary<string, IOperation> _operationDictionary;
 		private readonly Dictionary<string, double> _constants;
 		private readonly Stack<double> _memory;
 		private readonly Stack<double> _numbers;
 		private readonly Stack<string> _history;
+		private readonly HashSet<string> _unaryOps;
 
-		public CalculationCulture CurrentCulture { get; set; }
+		public CalculationCulture CurrentCulture { get; }
 		public Calculator()
 		{
+			CurrentCulture = new CalculationCulture();
+
 			_operationDictionary = new Dictionary<string, IOperation>()
 			{
 				["+"] = new Add(),
@@ -24,21 +28,27 @@ namespace CalculatorGUI.Models
 				["/"] = new Div(),
 				["^"] = new Pow(),
 				["!"] = new Factorial(),
-//				["%"] = new PercentOf(),
-//				["u%"] = new OnePercent(),
+				["%"] = new Mod(),
 				["u-"] = new UnaryMinus(),
 				["sqrt"] = new Sqrt(),
+				["abs"] = new Abs(),
 				["sin"] = new Sin(),
 				["cos"] = new Cos(),
 				["tg"] = new Tan(),
-				["arcsin"] = new Sin(),
-				["arccos"] = new Cos(),
-				["arctg"] = new Tan()
+				["arcsin"] = new Arcsin(),
+				["arccos"] = new Arccos(),
+				["arctg"] = new Arctan()
+			};
+
+			_unaryOps = new HashSet<string>()
+			{
+				"-"
 			};
 
 			_constants = new Dictionary<string, double>()
 			{
 				["π"] = Math.PI,
+				["pi"] = Math.PI,
 				["e"] = Math.E
 			};
 
@@ -56,31 +66,30 @@ namespace CalculatorGUI.Models
 			_numbers.Clear();
 
 			expression = InfixToPostfix(expression);
-			string parsed = "";
+			var argBuilder = new StringBuilder();
 
 			for (int i = 0; i < expression.Length; i++)
 			{
 				while (expression[i] != ' ')
-					parsed += expression[i++];
+				{
+					argBuilder.Append(expression[i++]);
+				}
 
-				if (_operationDictionary.TryGetValue(parsed, out IOperation operation))
+				var parsed = argBuilder.ToString();
+				if (_operationDictionary.TryGetValue(parsed, out var operation))
 				{
 					operation.Operate(_numbers, CurrentCulture);
 				}
-				else
+				else if ((double.TryParse(parsed, NumberStyles.Any,
+						CultureInfo.InvariantCulture, out var val))
+						|| _constants.TryGetValue(parsed, out val))
 				{
-					try
-					{
-						_numbers.Push(double.Parse(parsed));
-					}
-					catch (FormatException)
-					{
-						if (_constants.TryGetValue(parsed, out double val))
-							_numbers.Push(val);
-						else throw new Exception("Bad syntax");
-					}
+					_numbers.Push(val);
 				}
-				parsed = "";
+				else
+					throw new Exception("Bad syntax");
+
+				argBuilder.Clear();
 			}
 
 			_memory.Push(_numbers.Peek());
@@ -107,12 +116,17 @@ namespace CalculatorGUI.Models
 		{
 			bool lastIsOp = true;
 			int braces = 0;
-			string postfix = "";
+			var postfix = new StringBuilder();
 
-			Stack<string> operations = new Stack<string>();
+			var operations = new Stack<string>();
+			var operandBuilder = new StringBuilder();
 
 			for (int i = 0; i < infix.Length; ++i)
 			{
+				if (char.IsWhiteSpace(infix[i]))
+				{
+					continue;
+				}
 				if (infix[i] == '(')
 				{
 					braces++;
@@ -128,51 +142,43 @@ namespace CalculatorGUI.Models
 
 					while (operations.Count > 0 && operations.Peek() != "(")
 					{
-						postfix += operations.Pop() + " ";
+						postfix.Append(operations.Pop()).Append(" ");
 					}
 
 					operations.Pop();
 				}
 				else
 				{
-					string op = infix[i].ToString();
+					operandBuilder.Clear().Append(infix[i].ToString());
 					if (char.IsLetterOrDigit(infix[i]))
 					{
-						while (++i < infix.Length && char.IsLetterOrDigit(infix[i]))
+						while (++i < infix.Length && (char.IsLetterOrDigit(infix[i]) || infix[i] == '.'))
 						{
-							op += infix[i];
+							operandBuilder.Append(infix[i]);
 						}
 						i--;
 					}
 
-					if (!_operationDictionary.TryGetValue(op, out IOperation operation))
+					var operand = operandBuilder.ToString();
+					if (!_operationDictionary.TryGetValue(operand, out IOperation operation))
 					{
 						lastIsOp = false;
-						postfix += op + " ";
+						postfix.Append(operand).Append(" ");
 						continue;
 					}
 
-					if (op == "-" && lastIsOp)
+					if (_unaryOps.Contains(operand) && lastIsOp)
 					{
-						op = "u-";
-					}
-					else if (op == "%")
-					{
-						if (operations.Count == 0
-							|| operations.Peek() != "-"
-							|| operations.Peek() != "+")
-						{
-							op = "u%";
-						}
+						operand = "u" + operand;
 					}
 
 					while (operations.Count > 0
-						&& _operationDictionary.TryGetValue(operations.Peek(), out IOperation top)
+						&& _operationDictionary.TryGetValue(operations.Peek(), out var top)
 						&& operation.GetPriority() <= top.GetPriority())
 					{
-						postfix += operations.Pop() + " ";
+						postfix.Append(operations.Pop()).Append(" ");
 					}
-					operations.Push(op);
+					operations.Push(operand);
 
 					lastIsOp = true;
 				}
@@ -181,10 +187,10 @@ namespace CalculatorGUI.Models
 
 			while (operations.Count > 0)
 			{
-				postfix += operations.Pop() + " ";
+				postfix.Append(operations.Pop()).Append(" ");
 			}
 
-			return postfix;
+			return postfix.ToString();
 		}
 		#endregion
 	}

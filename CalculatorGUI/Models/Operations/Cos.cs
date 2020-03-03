@@ -5,7 +5,7 @@ namespace CalculatorGUI.Models.Operations
 {
 	class Cos : IOperation
 	{
-		public OperationPriority GetPriority() => OperationPriority.UnaryPriority;
+		public OperationPriority GetPriority() => OperationPriority.FunctionPriority;
 
 		public void Operate(Stack<double> numbers, CalculationCulture currentCulture)
 		{

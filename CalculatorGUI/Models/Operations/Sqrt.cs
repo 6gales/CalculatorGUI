@@ -5,7 +5,7 @@ namespace CalculatorGUI.Models.Operations
 {
 	class Sqrt : IOperation
 	{
-		public OperationPriority GetPriority() => OperationPriority.UnaryPriority;//4?
+		public OperationPriority GetPriority() => OperationPriority.FunctionPriority;
 
 		public void Operate(Stack<double> numbers, CalculationCulture currentCulture)
 		{

@@ -2,7 +2,7 @@
 
 namespace CalculatorGUI.Models.Operations
 {
-	enum OperationPriority { SumPriority = 1, MulPriority, UnaryPriority }
+	enum OperationPriority { SumPriority = 1, MulPriority, PowPriority, UnaryPriority, FunctionPriority }
 
 	interface IOperation
 	{
