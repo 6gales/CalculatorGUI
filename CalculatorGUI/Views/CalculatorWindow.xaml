@@ -45,9 +45,9 @@
 			FontSize="20"
 			Content="{Binding Result}"/>
 
-		<Button Grid.Row="2" Grid.Column="0" Margin="3" Click="AddTextToInputOnClick">MC</Button>
-		<Button Grid.Row="2" Grid.Column="1" Margin="3" Click="AddTextToInputOnClick">MR</Button>
-		<Button Grid.Row="2" Grid.Column="2" Margin="3" Click="AddTextToInputOnClick">MS</Button>
+		<Button Grid.Row="2" Grid.Column="0" Margin="3" Click="ClearMemoryOnClick">MC</Button>
+		<Button Grid.Row="2" Grid.Column="1" Margin="3" Click="SetFromMemoryOnClick">MR</Button>
+		<Button Grid.Row="2" Grid.Column="2" Margin="3" Click="SaveToMemoryOnClick">MS</Button>
 		<Button Grid.Row="2" Grid.Column="3" Margin="3" Click="ClearInputOnClick">Clear</Button>
 		<Button
 			Grid.Row="2" Grid.Column="4" Margin="3"

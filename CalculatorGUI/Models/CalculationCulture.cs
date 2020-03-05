@@ -1,6 +1,6 @@
 ﻿namespace CalculatorGUI.Models
 {
-	public class CalculationCulture
+	public class CalculationCulture : ICalculationCulture
 	{
 		public bool UseDegrees { get; set; }
 	}

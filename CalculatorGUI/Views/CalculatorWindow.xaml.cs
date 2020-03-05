@@ -34,10 +34,14 @@ namespace CalculatorGUI.Views
 			switch (e.Key)
 			{
 				case Key.Enter:
-				
+					CalculatorViewModel.Remember();
 					break;
 				case Key.Back:
-					UserInput.Text = UserInput.Text.Remove(UserInput.Text.Length - 1);
+					if (CalculatorViewModel.UserInput.Length == 0)
+					{
+						return;
+					}
+					CalculatorViewModel.UserInput = UserInput.Text.Remove(UserInput.Text.Length - 1);
 					break;
 			}
 		}
@@ -51,8 +55,10 @@ namespace CalculatorGUI.Views
 
 		private void HandleTextInputEvent(object sender, TextCompositionEventArgs e)
 		{
-			if (!UserInput.IsFocused)
+			if (!UserInput.IsFocused && !string.IsNullOrWhiteSpace(e.Text))
+			{
 				CalculatorViewModel.UserInput += e.Text;
+			}
 		}
 
 		private void InverseButtonsOnClick(object sender, RoutedEventArgs e)
@@ -68,17 +74,17 @@ namespace CalculatorGUI.Views
 			if (sender is InversiveButton inversiveButton)
 			{
 				inversiveButton.InverseContent();
-//				_calculator.IsDegreesEnabled = !_calculator.IsDegreesEnabled;
+				CalculatorViewModel.CurrentCulture.UseDegrees = !CalculatorViewModel.CurrentCulture.UseDegrees;
 			}
 		}
 
 		private void AddTextToInputOnClick(object sender, RoutedEventArgs e)
 		{
-			var input = UserInput.Text.Remove(UserInput.SelectionStart, UserInput.SelectionLength);
+//			var input = UserInput.Text.Remove(UserInput.SelectionStart, UserInput.SelectionLength);
 			if (sender is Button button && button.Content is string content)
 			{
-				UserInput.Text = input.Insert(UserInput.CaretIndex, content);
-
+				//UserInput.Text = input.Insert(UserInput.CaretIndex, content);
+				CalculatorViewModel.UserInput += button.Content;
 				//UserInput.Text += button.Content;
 			}
 		}
@@ -88,7 +94,8 @@ namespace CalculatorGUI.Views
 			var input = UserInput.Text.Remove(UserInput.SelectionStart, UserInput.SelectionLength);
 			if (sender is Button button && button.Content is string content)
 			{
-				UserInput.Text = input.Insert(UserInput.CaretIndex, content + "(");
+				CalculatorViewModel.UserInput += content + '(';
+				//UserInput.Text = input.Insert(UserInput.CaretIndex, content + "(");
 				//UserInput.Text += button.Content + "(";
 			}
 		}
@@ -97,13 +104,13 @@ namespace CalculatorGUI.Views
 		{
 			if (sender is ListView list && list.SelectedItem is string newContent)
 			{
-				UserInput.Text = newContent;
+				CalculatorViewModel.UserInput = newContent;
 			}
 		}
 
 		private void EraseSymbolOnClick(object sender, RoutedEventArgs e)
 		{
-			UserInput.Text = UserInput.Text.Remove(UserInput.Text.Length - 1);
+			CalculatorViewModel.UserInput = UserInput.Text.Remove(UserInput.Text.Length - 1);
 		}
 
 		private void ClearInputOnClick(object sender, RoutedEventArgs e)
@@ -113,7 +120,7 @@ namespace CalculatorGUI.Views
 
 		private void ClearMemoryOnClick(object sender, RoutedEventArgs e)
 		{
-//			_viewModel.
+			CalculatorViewModel.ClearMemory();
 		}
 
 		private void SetFromMemoryOnClick(object sender, RoutedEventArgs e)
@@ -123,7 +130,12 @@ namespace CalculatorGUI.Views
 
 		private void SaveToMemoryOnClick(object sender, RoutedEventArgs e)
 		{
-			
+			CalculatorViewModel.Remember();
+		}
+
+		private void CalculateOnClick(object sender, RoutedEventArgs e)
+		{
+			CalculatorViewModel.Remember();
 		}
 	}
 }

@@ -20,14 +20,13 @@ namespace CalculatorGUI.ViewModels
 				_userInput = value;
 				OnPropertyChanged(nameof(UserInput));
 
-				try
+				if (_calculator.TryCalculate(_userInput, out var result))
 				{
-					var result = _calculator.Calculate(_userInput);
-					Result = result.ToString(CultureInfo.CurrentCulture);
+					Result = result.ToString(CultureInfo.InvariantCulture);
 				}
-				catch
+				else
 				{
-					// ignored
+					Result = "";
 				}
 			}
 		}
@@ -42,22 +41,20 @@ namespace CalculatorGUI.ViewModels
 			}
 		}
 
+		public ICalculationCulture CurrentCulture => _calculator.CurrentCulture;
 
 		public IEnumerable<string> History => _calculator.History;
 		public IEnumerable<double> Memory => _calculator.Memory;
 
 		public void ClearMemory() => _calculator.ClearMemory();
 
-		public void Remember(string expr)
+		public void Remember()
 		{
-			if (double.TryParse(expr, out double result))
+			if (double.TryParse(Result, out var result))
 			{
+				_calculator.WriteToHistory(UserInput);
 				_calculator.Remember(result);
-				return;
 			}
-
-			result = _calculator.Calculate(expr);
-			_calculator.Remember(result);
 		}
 
 		#region INotifyPropertyChanged

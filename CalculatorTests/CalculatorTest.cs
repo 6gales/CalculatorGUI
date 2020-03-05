@@ -10,7 +10,7 @@ namespace CalculatorTests
 	{
 		private static bool IsDoubleEquals(double l, double r)
 		{
-			return Math.Abs(l - r) < 0.0000001; //double.Epsilon * 2048 * 8;
+			return Math.Abs(l - r) < 0.0000001;
 		}
 
 		[TestMethod]

@@ -12,7 +12,7 @@ namespace CalculatorGUI.Models.Operations
 			return 1;
 		}
 
-		public void Operate(Stack<double> numbers, CalculationCulture currentCulture)
+		public void Operate(Stack<double> numbers, ICalculationCulture currentCulture)
 		{
 			if (numbers.Count < 1)
 				throw new Exception("Bad syntax");

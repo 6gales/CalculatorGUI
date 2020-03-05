@@ -15,7 +15,7 @@ namespace CalculatorGUI.Models
 		private readonly Stack<string> _history;
 		private readonly HashSet<string> _unaryOps;
 
-		public CalculationCulture CurrentCulture { get; }
+		public ICalculationCulture CurrentCulture { get; }
 		public Calculator()
 		{
 			CurrentCulture = new CalculationCulture();
@@ -61,47 +61,30 @@ namespace CalculatorGUI.Models
 
 		public void Remember(double number) => _memory.Push(number);
 
+		public bool TryCalculate(string expression, out double result)
+		{
+			if (string.IsNullOrEmpty(expression))
+			{
+				result = 0;
+				return false;
+			}
+			return TryComputePostfix(InfixToPostfix(expression), out result);
+		}
+
 		public double Calculate(string expression)
 		{
-			_numbers.Clear();
-
-			expression = InfixToPostfix(expression);
-			var argBuilder = new StringBuilder();
-
-			for (int i = 0; i < expression.Length; i++)
+			if (string.IsNullOrEmpty(expression))
 			{
-				while (expression[i] != ' ')
-				{
-					argBuilder.Append(expression[i++]);
-				}
-
-				var parsed = argBuilder.ToString();
-				if (_operationDictionary.TryGetValue(parsed, out var operation))
-				{
-					operation.Operate(_numbers, CurrentCulture);
-				}
-				else if ((double.TryParse(parsed, NumberStyles.Any,
-						CultureInfo.InvariantCulture, out var val))
-						|| _constants.TryGetValue(parsed, out val))
-				{
-					_numbers.Push(val);
-				}
-				else
-					throw new Exception("Bad syntax");
-
-				argBuilder.Clear();
+				throw new Exception("Empty string");
+			}
+			if (TryComputePostfix(InfixToPostfix(expression), out var result))
+			{
+				return result;
 			}
 
-			_memory.Push(_numbers.Peek());
-			return _numbers.Pop();
+			throw new Exception("Bad syntax");
 		}
-
-		public double GetResult(string expression)
-		{
-			_history.Push(expression);
-			return Calculate(expression);
-		}
-
+		
 		public void WriteToHistory(string expression)
 		{
 			_history.Push(expression);
@@ -191,6 +174,49 @@ namespace CalculatorGUI.Models
 			}
 
 			return postfix.ToString();
+		}
+
+		private bool TryComputePostfix(string expression, out double result)
+		{
+			_numbers.Clear();
+			result = 0.0;
+			var argBuilder = new StringBuilder();
+
+			for (int i = 0; i < expression.Length; i++)
+			{
+				while (expression[i] != ' ')
+				{
+					argBuilder.Append(expression[i++]);
+				}
+
+				var parsed = argBuilder.ToString();
+				if (_operationDictionary.TryGetValue(parsed, out var operation))
+				{
+					try
+					{
+						operation.Operate(_numbers, CurrentCulture);
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine(e);
+						return false;
+					}
+				}
+				else if ((double.TryParse(parsed, NumberStyles.Any,
+					         CultureInfo.InvariantCulture, out var val))
+				         || _constants.TryGetValue(parsed, out val))
+				{
+					_numbers.Push(val);
+				}
+				else
+					return false;
+
+				argBuilder.Clear();
+			}
+
+			_memory.Push(_numbers.Peek());
+			result = _numbers.Pop();
+			return true;
 		}
 		#endregion
 	}

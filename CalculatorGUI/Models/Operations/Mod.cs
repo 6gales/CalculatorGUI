@@ -5,7 +5,7 @@ namespace CalculatorGUI.Models.Operations
 {
 	class Mod : IOperation
 	{
-		public void Operate(Stack<double> numbers, CalculationCulture currentCulture)
+		public void Operate(Stack<double> numbers, ICalculationCulture currentCulture)
 		{
 			if (numbers.Count < 2)
 				throw new Exception("Bad syntax");
